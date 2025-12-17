@@ -82,10 +82,10 @@
 
   <!-- Supplier -->
   <label>Supplier Name</label>
-  <input id="supplier" placeholder="ABC Travels">
+  <input id="supplier" placeholder="ABC Travels" value="Unity cabs">
 
   <label>PAN (Optional)</label>
-  <input id="pan" placeholder="AAAAA1234A">
+  <input id="pan" placeholder="AAAAA1234A" value="AXRPJ5629E">
 
   <!-- Customer -->
   <label>Customer / Company Name</label>
@@ -126,10 +126,11 @@
 
     <p class="total">Total Payable: ₹<span id="iTotal"></span></p>
 
-    <p class="note">
-      Supplier is not registered under GST.  
-      This is a non-GST service invoice.
-    </p>
+   <p class="note">
+  Supplier is not registered under GST. GST not applicable.<br>
+  TDS, if applicable under Section 194C of the Income-tax Act,
+  shall be deducted by the payer as per applicable rates.
+  </p>
 
     <button onclick="window.print()">Print / Save as PDF</button>
   </div>
