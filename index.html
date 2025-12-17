@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cab Bill Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      background: #fff;
+      padding: 20px;
+      margin: auto;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row div {
+      flex: 1;
+    }
+
+    .bill {
+      margin-top: 20px;
+      border-top: 2px dashed #000;
+      padding-top: 15px;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .note {
+      font-size: 12px;
+      margin-top: 10px;
+      color: #444;
+    }
+
+    @media print {
+      button { display: none; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Cab Bill Generator</h2>
+
+  <!-- Supplier Details -->
+  <label>Supplier Name</label>
+  <input id="supplier" placeholder="ABC Travels">
+
+  <label>PAN (Optional)</label>
+  <input id="pan" placeholder="AAAAA1234A">
+
+  <label>
+    <input type="checkbox" id="gstCheck"> GST Registered
+  </label>
+
+  <label>GSTIN (Only if registered)</label>
+  <input id="gstin" disabled placeholder="29XXXXXXXXX1Z5">
+
+  <!-- Trip Details -->
+  <label>Customer / Company Name</label>
+  <input id="customer">
+
+  <div class="row">
+    <div>
+      <label>From</label>
+      <input id="from">
+    </div>
+    <div>
+      <label>To</label>
+      <input id="to">
+    </div>
+  </div>
+
+  <label>Fare Amount (₹)</label>
+  <input type="number" id="fare">
+
+  <button onclick="generateBill()">Generate Bill</button>
+
+  <!-- Bill Output -->
+  <div id="bill" class="bill" style="display:none;">
+    <h3>SERVICE INVOICE</h3>
+
+    <p><strong>Supplier:</strong> <span id="bSupplier"></span></p>
+    <p id="bGstin"></p>
+    <p><strong>Customer:</strong> <span id="bCustomer"></span></p>
+
+    <p><strong>Route:</strong> <span id="bRoute"></span></p>
+
+    <p>Fare: ₹<span id="bFare"></span></p>
+    <p id="bGst"></p>
+
+    <p class="total">Total: ₹<span id="bTotal"></span></p>
+
+    <p class="note" id="bNote"></p>
+
+    <button onclick="window.print()">Print / Save PDF</button>
+  </div>
+</div>
+
+<script>
+  const gstCheck = document.getElementById("gstCheck");
+  const gstinInput = document.getElementById("gstin");
+
+  gstCheck.addEventListener("change", () => {
+    gstinInput.disabled = !gstCheck.checked;
+  });
+
+  function generateBill() {
+    const supplier = document.getElementById("supplier").value;
+    const customer = document.getElementById("customer").value;
+    const from = document.getElementById("from").value;
+    const to = document.getElementById("to").value;
+    const fare = Number(document.getElementById("fare").value);
+    const gstin = gstinInput.value;
+
+    let gstAmount = 0;
+
+    if (gstCheck.checked) {
+      if (!gstin) {
+        alert("GSTIN is required to issue a GST invoice.");
+        return;
+      }
+      gstAmount = fare * 0.05;
+      document.getElementById("bGst").innerText = "GST (5%): ₹" + gstAmount.toFixed(2);
+      document.getElementById("bGstin").innerText = "GSTIN: " + gstin;
+      document.getElementById("bNote").innerText =
+        "GST charged @5% without ITC.";
+    } else {
+      document.getElementById("bGst").innerText = "";
+      document.getElementById("bGstin").innerText = "";
+      document.getElementById("bNote").innerText =
+        "Supplier is not registered under GST. GST not applicable.";
+    }
+
+    document.getElementById("bSupplier").innerText = supplier;
+    document.getElementById("bCustomer").innerText = customer;
+    document.getElementById("bRoute").innerText = from + " → " + to;
+    document.getElementById("bFare").innerText = fare.toFixed(2);
+    document.getElementById("bTotal").innerText = (fare + gstAmount).toFixed(2);
+
+    document.getElementById("bill").style.display = "block";
+  }
+</script>
+
+</body>
+</html>
