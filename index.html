@@ -89,16 +89,19 @@
 <div class="container">
   <h2>Cab Service Invoice </h2>
   <div class="form-section">
-    
+  <!-- Invoice No -->
+  <label>Invoice No</label>
+  <input id="invoicee" value="001" >
+  
   <!-- Supplier -->
   <label>Supplier Name</label>
   <input id="supplier" placeholder="ABC Travels" value="Unity cabs" disabled>
 
   <label>Cab</label>
-  <input id="cab" placeholder="cab name" value="TN20-DL-3496" disabled>
+  <input id="cab" placeholder="cab name" value="" disabled>
   
   <label>PAN (Optional)</label>
-  <input id="pan" placeholder="AAAAA1234A" value="AXRPJ5629E">
+  <input id="pan" placeholder="AAAAA1234A" value="">
 
   <!-- Customer -->
   <label>Customer / Company Name</label>
@@ -128,6 +131,9 @@
   <div id="invoice" class="invoice">
     <h3>SERVICE INVOICE</h3>
     <p><strong>Invoice No:</strong> <span id="iInvoice"></span></p>
+    <p><strong>Date:</strong> <span id="iDate"></span></p>
+
+    <br/>
     <p><strong>Supplier:</strong> <span id="iSupplier"></span></p>
     <p><strong>Cab:</strong>   <span id="iCab"></span></p>
     <strong></strong><p id="iPan"></p>
@@ -135,16 +141,17 @@
     <br/>
     <p><strong>Billed To:</strong> <span id="iCustomer"></span></p>
     <p><strong>Trip:</strong> <span id="iRoute"></span></p>
-    <p><strong>Date:</strong> <span id="iDate"></span></p>
 
     <p><strong></strong>Fare Amount: ₹<span id="iFare"></span></p>
     <br/>
     <p class="total">Total Payable: ₹<span id="iTotal"></span></p>
 
    <p class="note">
-  Note: Supplier is not registered under GST. GST not applicable.<br>
+  <strong>Note: </strong> Supplier is not registered under GST. GST not applicable.<br>
   TDS, if applicable under Section 194C of the Income-tax Act,
   shall be deducted by the payer as per applicable rates.
+  <br> <br>
+  This is a computer-generated invoice and does not require a signature.
   </p>
 
     <button onclick="window.print()">Print / Save as PDF</button>
@@ -153,6 +160,7 @@
 
 <script>
   function generateInvoice() {
+    const invoiceNo = document.getElementById("invoicee").value;
     const supplier = document.getElementById("supplier").value;
     const pan = document.getElementById("pan").value;
     const customer = document.getElementById("customer").value;
@@ -167,8 +175,8 @@
       alert("Please fill required fields.");
       return;
     }
-
     document.getElementById("iSupplier").innerText = supplier;
+    document.getElementById("iInvoice").innerText = invoiceNo;
     document.getElementById("iPan").innerText = pan ? "PAN: " + pan : "";
     document.getElementById("iCustomer").innerText = customer;
     document.getElementById("iRoute").innerText = from + " → " + to;
