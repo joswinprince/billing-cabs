@@ -35,6 +35,11 @@
       padding: 8px;
       margin-top: 5px;
     }
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
 
     .row {
       display: flex;
@@ -97,9 +102,16 @@
   <label>Supplier Name</label>
   <input id="supplier" placeholder="ABC Travels" value="Unity cabs" disabled>
 
-  <label>Cab</label>
-  <input id="cab" placeholder="cab name" value="">
-  
+  <label>Cab No</label>
+  <input id="cab" placeholder="TN20-DP-XXXX" value="">
+
+  <label>Select Cab Type</label>
+  <select id="cabType"  onchange="fareUpdate()">
+    <option value="" disabled selected>Select Cab Type</option>
+    <option value="Sedan">Sedan</option>
+    <option value="SUV">SUV</option>
+  </select>
+
   <label>PAN (Optional)</label>
   <input id="pan" placeholder="AAAAA1234A" value="">
 
@@ -122,6 +134,10 @@
   <label>Trip Date</label>
   <input type="date" id="date">
 
+
+  <label>Distance (Km)</label>
+  <input type="number" id="distance" onchange="fareUpdate()">
+
   <label>Fare Amount (₹)</label>
   <input type="number" id="fare">
 
@@ -136,12 +152,14 @@
     <br/>
     <p><strong>Supplier:</strong> <span id="iSupplier"></span></p>
     <p><strong>Cab:</strong>   <span id="iCab"></span></p>
+    <p><strong>Cab Type:</strong>   <span id="iCabType"></span></p>
     <strong></strong><p id="iPan"></p>
     <p><strong>Email:</strong>   unitycabs@zohomail.in</p>
     <br/>
     <p><strong>Billed To:</strong> <span id="iCustomer"></span></p>
     <p><strong>Trip:</strong> <span id="iRoute"></span></p>
 
+    <p><strong>Distance:</strong> <span id="iDistance"></span> km</p>
     <p><strong></strong>Fare Amount: ₹<span id="iFare"></span></p>
     <br/>
     <p class="total">Total Payable: ₹<span id="iTotal"></span></p>
@@ -170,21 +188,43 @@
     const to = document.getElementById("to").value;
     const date = document.getElementById("date").value;
     const fare = document.getElementById("fare").value;
+    const cabType = document.getElementById("cabType").value;
+    const distance = document.getElementById("distance").value;
 
-    if (!supplier || !customer || !fare) {
+    if (!supplier || !customer || !fare||cabType=="" || !from || !to || !date) {
       alert("Please fill required fields.");
       return;
     }
+
+    
     document.getElementById("iSupplier").innerText = supplier;
     document.getElementById("iInvoice").innerText = invoiceNo;
     document.getElementById("iPan").innerText = pan ? "PAN: " + pan : "";
     document.getElementById("iCustomer").innerText = customer;
     document.getElementById("iRoute").innerText = from + " → " + to;
     document.getElementById("iDate").innerText = date;
+    document.getElementById("iDistance").innerText = distance;
     document.getElementById("iFare").innerText = Number(fare).toFixed(2);
     document.getElementById("iTotal").innerText = Number(fare).toFixed(2);
     document.getElementById("iCab").innerText = cab;
     document.getElementById("invoice").style.display = "block";
+    document.getElementById("iCabType").innerText = cabType;
+
+
+  }
+  function fareUpdate() {
+    const cabType = document.getElementById("cabType").value;
+    const fareInput = document.getElementById("fare");
+    const distance = document.getElementById("distance").value;
+    if (cabType === "Sedan") {
+      fareInput.value = 25 * distance;
+      
+    } else if (cabType === "SUV") {
+      fareInput.value = 35 * distance;
+    } else {
+      fareInput.value = "";
+    }
+    console.log(fareInput.value);
   }
 </script>
 
